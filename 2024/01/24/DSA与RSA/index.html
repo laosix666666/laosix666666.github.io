@@ -16,22 +16,23 @@
   <meta name="author" content="liu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="看了很多大佬的博客整理的 sagemath与python的不同12345678x**y#均表示幂x^y#sage中表示幂，python中是异或x^^y#sage中合法且表示异或  环和域整数环，ZZ 有理数环，QQ 实数域，RR 负数域，CC 多项式环，PolynomialRing() 1PR.&lt;x&gt; &#x3D; PolynomialRing(Zmod(N))  创建了一个mod n下的多项式">
+    <meta name="description" content="在用 ssh-keygen 生成密钥对时，通常会面临是使用RSA还是DSA的选择：RSA or DSA, this is a question! 今天在这里分析一下： 原理与安全性     RSA 与 DSA 都是非对称加密算法。其中RSA的安全性是基于极其困难的大整数的分解（两个素数的乘积）；DSA 的安全性是基于整数有限域离散对数难题。基本上可以认为相同密钥长度的 RSA 算法与 DSA 算">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sagemath整理">
-<meta property="og:url" content="http://example.com/2024/01/20/sagemath/index.html">
+<meta property="og:title" content="DSA与RSA">
+<meta property="og:url" content="http://example.com/2024/01/24/DSA%E4%B8%8ERSA/index.html">
 <meta property="og:site_name" content="laosix">
-<meta property="og:description" content="看了很多大佬的博客整理的 sagemath与python的不同12345678x**y#均表示幂x^y#sage中表示幂，python中是异或x^^y#sage中合法且表示异或  环和域整数环，ZZ 有理数环，QQ 实数域，RR 负数域，CC 多项式环，PolynomialRing() 1PR.&lt;x&gt; &#x3D; PolynomialRing(Zmod(N))  创建了一个mod n下的多项式">
+<meta property="og:description" content="在用 ssh-keygen 生成密钥对时，通常会面临是使用RSA还是DSA的选择：RSA or DSA, this is a question! 今天在这里分析一下： 原理与安全性     RSA 与 DSA 都是非对称加密算法。其中RSA的安全性是基于极其困难的大整数的分解（两个素数的乘积）；DSA 的安全性是基于整数有限域离散对数难题。基本上可以认为相同密钥长度的 RSA 算法与 DSA 算">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-01-20T13:17:20.000Z">
-<meta property="article:modified_time" content="2024-01-20T13:17:10.102Z">
+<meta property="og:image" content="https://csdnimg.cn/release/phoenix/template/new_img/reprint.png">
+<meta property="article:published_time" content="2024-01-24T05:36:57.000Z">
+<meta property="article:modified_time" content="2024-01-24T05:37:49.069Z">
 <meta property="article:author" content="liu">
-<meta property="article:tag" content="原创">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://csdnimg.cn/release/phoenix/template/new_img/reprint.png">
   
   
   
-  <title>sagemath整理 - laosix</title>
+  <title>DSA与RSA - laosix</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -226,7 +227,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="sagemath整理"></span>
+            <span id="subtitle" data-typed-text="DSA与RSA"></span>
           
         </div>
 
@@ -237,8 +238,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-01-20 21:17" pubdate>
-          2024年1月20日 晚上
+        <time datetime="2024-01-24 13:36" pubdate>
+          2024年1月24日 下午
         </time>
       </span>
     
@@ -249,7 +250,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          287 字
+          926 字
         
       </span>
     
@@ -260,7 +261,7 @@
         
         
         
-          3 分钟
+          8 分钟
         
       </span>
     
@@ -297,38 +298,31 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">sagemath整理</h1>
+            <h1 id="seo-header">DSA与RSA</h1>
             
             
               <div class="markdown-body">
                 
-                <p>看了很多大佬的博客整理的</p>
-<h2 id="sagemath与python的不同"><a href="#sagemath与python的不同" class="headerlink" title="sagemath与python的不同"></a>sagemath与python的不同</h2><figure class="highlight parser3"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs parser3"><span class="language-xml">x**y</span><br><span class="language-xml"></span><span class="hljs-comment">#均表示幂</span><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml">x</span><span class="hljs-keyword">^y</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="hljs-comment">#sage中表示幂，python中是异或</span><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml">x^</span><span class="hljs-keyword">^y</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="hljs-comment">#sage中合法且表示异或</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="环和域"><a href="#环和域" class="headerlink" title="环和域"></a>环和域</h2><p>整数环，ZZ</p>
-<p>有理数环，QQ</p>
-<p>实数域，RR</p>
-<p>负数域，CC</p>
-<p>多项式环，PolynomialRing()</p>
-<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">PR</span>.&lt;<span class="hljs-variable">x</span>&gt; = <span class="hljs-function"><span class="hljs-title">PolynomialRing</span>(<span class="hljs-title">Zmod</span>(<span class="hljs-variable">N</span>))</span><br></code></pre></td></tr></table></figure>
-
-<p>创建了一个mod n下的多项式，名为PR，并设有一个未知数x</p>
-<h2 id="相关的算法"><a href="#相关的算法" class="headerlink" title="相关的算法"></a>相关的算法</h2><p>求逆元： inverse_mod(x,n)   （下了gmpy2库，就还可以用gmpy2.invert(e,phi))</p>
-<p>阶乘: factorial(x)</p>
-<p>求欧拉函数： euler_phi(n)</p>
-<p>中国剩余定理求解: crt([m1,m2],[n1,n2])</p>
-<p>分解素数：factor()</p>
-<h2 id="矩阵"><a href="#矩阵" class="headerlink" title="矩阵"></a>矩阵</h2><p>定义矩阵</p>
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">A = matrix(Zmod(2),[[1,2,3],[3,2,1],[1,1,1]])<br>print(A)<br>&#x27;&#x27;&#x27;<br><span class="hljs-meta">[1 0 1]</span><br><span class="hljs-meta">[1 0 1]</span><br><span class="hljs-meta">[1 1 1]</span><br>&#x27;&#x27;&#x27;<br><br>B = matrix(GF(2),A)<br>print(B)<br>&#x27;&#x27;&#x27;<br><span class="hljs-meta">[1 0 1]</span><br><span class="hljs-meta">[1 0 1]</span><br><span class="hljs-meta">[1 1 1]</span><br>&#x27;&#x27;&#x27;<br><br>m = matrix(GF(2),3,3)<br>print(m)<br>#定义3x3初始化矩阵，默认0<br><br></code></pre></td></tr></table></figure>
-
-
-<p>定义向量</p>
-<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs leaf">Y = vector(ZZ,[0,-4,-1])<br>print(Y)<br><span class="hljs-punctuation">#</span><span class="hljs-params">(0,<span class="hljs-operator">-</span>4,<span class="hljs-operator">-</span>1)</span><br><br>Y = vector(GF(2),[0,-4,-1])<br>print(Y)<br><span class="hljs-punctuation">#</span><span class="hljs-params">(0,0,1)</span><br></code></pre></td></tr></table></figure>
-
-
-<h2 id="创建多项式环"><a href="#创建多项式环" class="headerlink" title="创建多项式环"></a>创建多项式环</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sagemath">R.&lt;x&gt; = PloynomialRing(QQ)<br></code></pre></td></tr></table></figure>
-
-<h2 id="多元多项式"><a href="#多元多项式" class="headerlink" title="多元多项式"></a>多元多项式</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sagemath">R.&lt;s0, s1, s2&gt; = PolynomialRing(QQ,3)<br>I = ideal(s0 + s1 + s2 - s, s0^e - c0, s1^17 - c1, s2^17 - c2)<br>s = I.groebner_basis()<br><br></code></pre></td></tr></table></figure>
+                <p><img src="https://csdnimg.cn/release/phoenix/template/new_img/reprint.png" srcset="/img/loading.gif" lazyload></p>
+<p>在用 ssh-keygen 生成密钥对时，通常会面临是使用RSA还是DSA的选择：RSA or DSA, this is a question! 今天在这里分析一下：</p>
+<p>原理与安全性</p>
+<p>    RSA 与 DSA 都是非对称加密算法。其中RSA的安全性是基于极其困难的大整数的分解（两个素数的乘积）；DSA 的安全性是基于整数有限域离散对数难题。基本上可以认为相同密钥长度的 RSA 算法与 DSA 算法安全性相当。</p>
+<p>    有点要注意，RSA 的安全性依赖于大数分解，但是否等同于大数分解一直未能得到理论上的证明，因为没有证明破解 RSA 就一定需要作大数分解。不过也不必太过担心，RSA 从诞生以来，经历了各种攻击，至今未被完全攻破（依靠暴力破解，小于1024位密钥长度的 RSA 有被攻破的记录，但未从算法上被攻破）。</p>
+<p>用途：</p>
+<p>    DSA 只能用于数字签名，而无法用于加密（某些扩展可以支持加密）；RSA 即可作为数字签名，也可以作为加密算法。不过作为加密使用的 RSA 有着随密钥长度增加，性能急剧下降的问题。</p>
+<p>性能：</p>
+<p>    相同密钥长度下，DSA 做签名时速度更快，但做签名验证时速度较慢，一般情况验证签名的次数多于签名的次数。</p>
+<p>    相同密钥长度下，DSA （在扩展支持下）解密密文更快，而加密更慢；RSA 正好反过来，一般来说解密次数多于加密次数。不过由于非对称加密算法的先天性能问题，两者都不是加密的好选择。</p>
+<p>业界支持：</p>
+<p>    在业界支持方面，RSA 显然是赢家。RSA 具有更为广泛的部署与支持。</p>
+<p>使用 ssh-keygen 时的选择：</p>
+<p>    上面说了那么多，可以看到RSA 与 DSA 各有优缺点。回到开头的问题，在使用 ssh-keygen 时，RSA 与 DSA到底选哪个？ 比较有意思的是，这个问题最终答案与上面那些优缺点无关。虽然理论上可以生成更长长度的 DSA 密钥 （NIST FIPS 186-3），但ssh-keygen在生成 DSA 密钥时，其长度只能为1024位（基于NIST FIPS 186-2）；而 ssh-keygen 在 RSA 的密钥长度上没有限制。</p>
+<p>     由于小于1024位密钥长度的 RSA 已经有被攻破的记录，所以说现在：RSA 2048 位密钥是更好的选择。</p>
+<p>其它选择：</p>
+<p>    RSA 与 DSA 各有优缺点，那有没一个更好的选择呢？答案是肯定的，ECC（Elliptic Curves Cryptography）：椭圆曲线算法。</p>
+<p>    ECC 与 RSA 相比，有以下的优点：<br>（1）相同密钥长度下，安全性能更高，如160位ECC已经与1024位RSA、DSA有相同的安全强度。<br>（2）计算量小，处理速度快，在私钥的处理速度上（解密和签名），ECC远 比RSA、DSA快得多。<br>（3）存储空间占用小 ECC的密钥尺寸和系统参数与RSA、DSA相比要小得多， 所以占用的存储空间小得多。<br>（4）带宽要求低使得ECC具有广泛得应用前景。</p>
+<p>    在 ssh-keygen 中，ECC 算法的相应参数是 “-t ecdsa”。可惜的是由于椭圆曲线算法只有在较新版本的 openssl 与 ssh-keygen 中才被支持，而无法得到普遍使用而去完全替代 RSA&#x2F;DSA。不过由于椭圆曲线算法的优点，使其取代 RSA&#x2F;DSA 而成为新一代通用的非对称加密算法成为可能，至少 SET 协议的制定者们已经把它作为下一代 SET 协议中缺省的公钥密码算法了。</p>
+<p><a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_6f31085901015agu.html">链接</a></p>
 
                 
               </div>
@@ -338,13 +332,6 @@
               <div class="post-metas my-3">
   
   
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
-      
-    </div>
-  
 </div>
 
 
@@ -353,8 +340,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>sagemath整理</div>
-      <div>http://example.com/2024/01/20/sagemath/</div>
+      <div>DSA与RSA</div>
+      <div>http://example.com/2024/01/24/DSA与RSA/</div>
     </div>
     <div class="license-meta">
       
@@ -366,7 +353,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年1月20日</div>
+          <div>2024年1月24日</div>
         </div>
       
       
@@ -398,15 +385,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/01/24/DSA%E4%B8%8ERSA/" title="DSA与RSA">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">DSA与RSA</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2024/01/20/sagemath/" title="sagemath整理">
+                        <span class="hidden-mobile">sagemath整理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
