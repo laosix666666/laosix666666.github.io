@@ -16,21 +16,21 @@
   <meta name="author" content="liu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在用 ssh-keygen 生成密钥对时，通常会面临是使用RSA还是DSA的选择：RSA or DSA, this is a question! 今天在这里分析一下： 原理与安全性 RSA 与 DSA 都是非对称加密算法。其中RSA的安全性是基于极其困难的大整数的分解（两个素数的乘积）；DSA 的安全性是基于整数有限域离散对数难题。基本上可以认为相同密钥长度的 RSA 算法与 DSA 算法安全性相">
+    <meta name="description" content="强网青少赛  未解之谜12345678910111213141516171819202122from Crypto.Util.number import getPrime, getRandomRange, inverse, bytes_to_longfrom gmpy2 import rootfrom secret import flag  p &#x3D; getPrime(1024)q &#x3D; getPri">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DSA与RSA">
-<meta property="og:url" content="http://example.com/2024/01/24/DSA%E4%B8%8ERSA/index.html">
+<meta property="og:title" content="连分数">
+<meta property="og:url" content="http://example.com/2024/02/03/%E8%BF%9E%E5%88%86%E6%95%B0/index.html">
 <meta property="og:site_name" content="laosix">
-<meta property="og:description" content="在用 ssh-keygen 生成密钥对时，通常会面临是使用RSA还是DSA的选择：RSA or DSA, this is a question! 今天在这里分析一下： 原理与安全性 RSA 与 DSA 都是非对称加密算法。其中RSA的安全性是基于极其困难的大整数的分解（两个素数的乘积）；DSA 的安全性是基于整数有限域离散对数难题。基本上可以认为相同密钥长度的 RSA 算法与 DSA 算法安全性相">
+<meta property="og:description" content="强网青少赛  未解之谜12345678910111213141516171819202122from Crypto.Util.number import getPrime, getRandomRange, inverse, bytes_to_longfrom gmpy2 import rootfrom secret import flag  p &#x3D; getPrime(1024)q &#x3D; getPri">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-01-24T05:36:57.000Z">
-<meta property="article:modified_time" content="2024-01-24T05:44:56.515Z">
+<meta property="article:published_time" content="2024-02-03T08:50:01.000Z">
+<meta property="article:modified_time" content="2024-02-03T08:50:49.847Z">
 <meta property="article:author" content="liu">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>DSA与RSA - laosix</title>
+  <title>连分数 - laosix</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -225,7 +225,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="DSA与RSA"></span>
+            <span id="subtitle" data-typed-text="连分数"></span>
           
         </div>
 
@@ -236,8 +236,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-01-24 13:36" pubdate>
-          2024年1月24日 下午
+        <time datetime="2024-02-03 16:50" pubdate>
+          2024年2月3日 下午
         </time>
       </span>
     
@@ -248,7 +248,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          924 字
+          108 字
         
       </span>
     
@@ -259,7 +259,7 @@
         
         
         
-          8 分钟
+          1 分钟
         
       </span>
     
@@ -296,35 +296,19 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">DSA与RSA</h1>
+            <h1 id="seo-header">连分数</h1>
             
             
               <div class="markdown-body">
                 
-                <p>在用 ssh-keygen 生成密钥对时，通常会面临是使用RSA还是DSA的选择：RSA or DSA, this is a question! 今天在这里分析一下：</p>
-<p>原理与安全性</p>
-<pre><code class="hljs">RSA 与 DSA 都是非对称加密算法。其中RSA的安全性是基于极其困难的大整数的分解（两个素数的乘积）；DSA 的安全性是基于整数有限域离散对数难题。基本上可以认为相同密钥长度的 RSA 算法与 DSA 算法安全性相当。
-
-有点要注意，RSA 的安全性依赖于大数分解，但是否等同于大数分解一直未能得到理论上的证明，因为没有证明破解 RSA 就一定需要作大数分解。不过也不必太过担心，RSA 从诞生以来，经历了各种攻击，至今未被完全攻破（依靠暴力破解，小于1024位密钥长度的 RSA 有被攻破的记录，但未从算法上被攻破）。
-</code></pre><p>用途：</p>
-<pre><code class="hljs">DSA 只能用于数字签名，而无法用于加密（某些扩展可以支持加密）；RSA 即可作为数字签名，也可以作为加密算法。不过作为加密使用的 RSA 有着随密钥长度增加，性能急剧下降的问题。
-</code></pre><p>性能：</p>
-<pre><code class="hljs">相同密钥长度下，DSA 做签名时速度更快，但做签名验证时速度较慢，一般情况验证签名的次数多于签名的次数。
-
-相同密钥长度下，DSA （在扩展支持下）解密密文更快，而加密更慢；RSA 正好反过来，一般来说解密次数多于加密次数。不过由于非对称加密算法的先天性能问题，两者都不是加密的好选择。
-</code></pre><p>业界支持：</p>
-<pre><code class="hljs">在业界支持方面，RSA 显然是赢家。RSA 具有更为广泛的部署与支持。
-</code></pre><p>使用 ssh-keygen 时的选择：</p>
-<pre><code class="hljs">上面说了那么多，可以看到RSA 与 DSA 各有优缺点。回到开头的问题，在使用 ssh-keygen 时，RSA 与 DSA到底选哪个？ 比较有意思的是，这个问题最终答案与上面那些优缺点无关。虽然理论上可以生成更长长度的 DSA 密钥 （NIST FIPS 186-3），但ssh-keygen在生成 DSA 密钥时，其长度只能为1024位（基于NIST FIPS 186-2）；而 ssh-keygen 在 RSA 的密钥长度上没有限制。
-
- 由于小于1024位密钥长度的 RSA 已经有被攻破的记录，所以说现在：RSA 2048 位密钥是更好的选择。
-</code></pre><p>其它选择：</p>
-<pre><code class="hljs">RSA 与 DSA 各有优缺点，那有没一个更好的选择呢？答案是肯定的，ECC（Elliptic Curves Cryptography）：椭圆曲线算法。
-
-ECC 与 RSA 相比，有以下的优点：  
-</code></pre><p>（1）相同密钥长度下，安全性能更高，如160位ECC已经与1024位RSA、DSA有相同的安全强度。<br>（2）计算量小，处理速度快，在私钥的处理速度上（解密和签名），ECC远 比RSA、DSA快得多。<br>（3）存储空间占用小 ECC的密钥尺寸和系统参数与RSA、DSA相比要小得多， 所以占用的存储空间小得多。<br>（4）带宽要求低使得ECC具有广泛得应用前景。</p>
-<pre><code class="hljs">在 ssh-keygen 中，ECC 算法的相应参数是 “-t ecdsa”。可惜的是由于椭圆曲线算法只有在较新版本的 openssl 与 ssh-keygen 中才被支持，而无法得到普遍使用而去完全替代 RSA/DSA。不过由于椭圆曲线算法的优点，使其取代 RSA/DSA 而成为新一代通用的非对称加密算法成为可能，至少 SET 协议的制定者们已经把它作为下一代 SET 协议中缺省的公钥密码算法了。
-</code></pre><p><a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_6f31085901015agu.html">链接</a></p>
+                <h2 id="强网青少赛-未解之谜"><a href="#强网青少赛-未解之谜" class="headerlink" title="强网青少赛  未解之谜"></a>强网青少赛  未解之谜</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> getPrime, getRandomRange, inverse, bytes_to_long<br><span class="hljs-keyword">from</span> gmpy2 <span class="hljs-keyword">import</span> root<br><span class="hljs-keyword">from</span> secret <span class="hljs-keyword">import</span> flag<br> <br> <br>p = getPrime(<span class="hljs-number">1024</span>)<br>q = getPrime(<span class="hljs-number">1024</span>)<br>n = p * q<br> <br>phi = (p - <span class="hljs-number">1</span>) * (q - <span class="hljs-number">1</span>)<br>d = phi - getRandomRange(<span class="hljs-number">2</span>, <span class="hljs-built_in">int</span>(root(n, <span class="hljs-number">4</span>))) // <span class="hljs-number">8</span><br>e = inverse(d, phi)<br> <br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;n =&#x27;</span>, n)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;e =&#x27;</span>, e)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;c =&#x27;</span>, <span class="hljs-built_in">pow</span>(bytes_to_long(flag), e, n))<br> <br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">n = 25104277676119161522476112705793911276186101133479173238944044444464009124657009694225705909271077799809201079535406029771187080821769825464939077364642964415589149682726638069269303311285936728041400854664257359847513887226478935580304175033826156547132233021300058658354982546861556682763142936482347346981937850032206377127314298996750210542463016619202624387167346335084458869807050799087359137798417551118968333882132707224657634668232656084437165318707402672030846390316318799964502570888352016316259499484840687212162216956553959109504315812401670136366987689573854797204256680114377923495968022852465088943989</span><br><span class="hljs-string">e = 20178654515985191683778773315986117381438788487541162528625194682232622732804488937715690749685871993409744005510930308420585745479669138349385107492298100706904329996211024990254138155122883012416834611836914150399764071426903891183064811037874610688800753516815651605274198703402396721086099787022825008576711822311154359274255900798872482666009298170322494751141546145941540881032818218463468104215745893024753697280199179802990999289320485792935099342229022401065822066935230288340988833699778866513151729621894378561772202838242163207916815287677576914310414398842800437151570085615904905893908276037442921399227</span><br><span class="hljs-string">c = 17919859480795687548085357946533906742006563498678009884880024066719328584604178565823672582612851264338072607103147445102727569389591915368827826312868652213968050837327044813877938386742395231183072530875013974151364420171911413436696049091197432327690528295737499380220977246385029611858967823050774781344312401574401181366787200767075321779650346958885769663961952777015710540836731205786542415656103087841645510635687411784335649106356843368609597447408986641261723987501544380365356737604262721383825893578507628688434330167951610192310425417890688432557997801981742408687534970307199203734028604303069367331398</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br></code></pre></td></tr></table></figure>
+<p>x =getRandomRange(2, int(root(n, 4))) // 8<br>d = phi -x<br>ed = 1 mod phi<br>e<em>phi -e</em>x = 1 mod phi<br>-ex = 1 mod phi<br>ex = -1 mod phi<br>ex = kphi -1<br>e/phi = k/x - 1/xphi</p>
+<script type="math/tex; mode=display">\frac{e}{n}\approx\frac{k}{x}</script><script type="math/tex; mode=display">| \frac{e}{n}-\frac{k}{x}|\approx; \frac{1}{n}<\frac{1}{2x^2}</script><p>其中n是2048bit量级，而x是509bit量级，因此上式成立，即符合勒让德理论，因此可以连分数展开求d<br>需要注意的是，我们求的是x，但实际解密需要用−x解</p>
+<h3 id="攻击原理"><a href="#攻击原理" class="headerlink" title="攻击原理"></a>攻击原理</h3><p>勒让德定理：对于正有理数f,如果整数a和正整数b，满足<script type="math/tex">|f-a/b|<1/2b^{2}</script><br>那么a/b等于f的连分数的一个收敛子</p>
+<script type="math/tex; mode=display">ed -kphi  = 1</script><script type="math/tex; mode=display">|\frac{e}{phi}-\frac{k}{d}|=\frac{1}{dphi}</script><p>仔细观察上式，因为phi本身很大，而且gcd(k,d)=1，k/d与e/phi非常接近。 </p>
+<p>此外phi = (p-1)<em>(q-1)= N-(p+q)+1<br>其与N的差值也相对很小，所以k/d与e/N也相差不大。RSA的(N,e)都是公开的，由此维纳大胆地构想——<em>*如果对e/N进行连分数展开，有可能k/d就是其中的某个收敛子！</em></em></p>
+<p>exp :<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs sagemath">from Crypto.Util.number import *<br><br>n = 25104277676119161522476112705793911276186101133479173238944044444464009124657009694225705909271077799809201079535406029771187080821769825464939077364642964415589149682726638069269303311285936728041400854664257359847513887226478935580304175033826156547132233021300058658354982546861556682763142936482347346981937850032206377127314298996750210542463016619202624387167346335084458869807050799087359137798417551118968333882132707224657634668232656084437165318707402672030846390316318799964502570888352016316259499484840687212162216956553959109504315812401670136366987689573854797204256680114377923495968022852465088943989<br>e = 20178654515985191683778773315986117381438788487541162528625194682232622732804488937715690749685871993409744005510930308420585745479669138349385107492298100706904329996211024990254138155122883012416834611836914150399764071426903891183064811037874610688800753516815651605274198703402396721086099787022825008576711822311154359274255900798872482666009298170322494751141546145941540881032818218463468104215745893024753697280199179802990999289320485792935099342229022401065822066935230288340988833699778866513151729621894378561772202838242163207916815287677576914310414398842800437151570085615904905893908276037442921399227<br>c = 17919859480795687548085357946533906742006563498678009884880024066719328584604178565823672582612851264338072607103147445102727569389591915368827826312868652213968050837327044813877938386742395231183072530875013974151364420171911413436696049091197432327690528295737499380220977246385029611858967823050774781344312401574401181366787200767075321779650346958885769663961952777015710540836731205786542415656103087841645510635687411784335649106356843368609597447408986641261723987501544380365356737604262721383825893578507628688434330167951610192310425417890688432557997801981742408687534970307199203734028604303069367331398<br><br>cf = continued_fraction(Integer(e) / Integer(n))<br>#从 e/n 的分数创建了一个连分数，其中 e 和 n 可能是整数<br>for i in range(1,10000):<br>    k = int(cf.numerator(i))#获取连分数在位置 `i` 的分子<br>    d = int(cf.denominator(i))#获取连分数在位置 `i` 的分母。<br>    m = pow(c,-d,n)<br>    flag = long_to_bytes(int(m))<br>    if b&quot;flag&quot; in flag:<br>        print(f&quot;d = &#123;d&#125;&quot;)<br>        print(i)<br>        print(flag)<br>        # flag&#123;c30d7177-1bb7-4caf-b602-39f8d2e9792b&#125;<br>        break<br>  <br><br><br></code></pre></td></tr></table></figure></p>
+<p>d = 708602637944589857585361609943943505678936560774825780499182413506360872814199414872082839269573021851048131778729568202333963575262137045777897042099597<br>263<br>b’flag{c30d7177-1bb7-4caf-b602-39f8d2e9792b}’</p>
 
                 
               </div>
@@ -342,8 +326,8 @@ ECC 与 RSA 相比，有以下的优点：
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>DSA与RSA</div>
-      <div>http://example.com/2024/01/24/DSA与RSA/</div>
+      <div>连分数</div>
+      <div>http://example.com/2024/02/03/连分数/</div>
     </div>
     <div class="license-meta">
       
@@ -355,7 +339,7 @@ ECC 与 RSA 相比，有以下的优点：
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年1月24日</div>
+          <div>2024年2月3日</div>
         </div>
       
       
@@ -387,18 +371,12 @@ ECC 与 RSA 相比，有以下的优点：
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/03/%E8%BF%9E%E5%88%86%E6%95%B0/" title="连分数">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">连分数</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/01/20/sagemath/" title="sagemath整理">
-                        <span class="hidden-mobile">sagemath整理</span>
+                      <a href="/2024/01/24/DSA%E4%B8%8ERSA/" title="DSA与RSA">
+                        <span class="hidden-mobile">DSA与RSA</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
