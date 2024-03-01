@@ -1,0 +1,768 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon-32x32.png">
+  <link rel="icon" href="/img/favicon-32x32.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="LFSR是属于FSR（反馈移位寄存器）的一种，除了LFSR之外，还包括NFSR（非线性反馈移位寄存器）。 FSR是流密码产生密钥流的一个重要组成部分，在GF(2)上的一个n级FSR通常由n个二元存储器和一个反馈函数组成，如下图所示：  如果这里的反馈函数是线性的，我们则将其称为LFSR，此时该反馈函数可以表示为：  其中ci&#x3D;0或1，⊕表示异或（模二加）。 我们接下来通过一个例子来更直观的明确LF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反馈移位寄存器">
+<meta property="og:url" content="http://example.com/2024/03/01/%E5%8F%8D%E9%A6%88%E7%A7%BB%E4%BD%8D%E5%AF%84%E5%AD%98%E5%99%A8/index.html">
+<meta property="og:site_name" content="laosix">
+<meta property="og:description" content="LFSR是属于FSR（反馈移位寄存器）的一种，除了LFSR之外，还包括NFSR（非线性反馈移位寄存器）。 FSR是流密码产生密钥流的一个重要组成部分，在GF(2)上的一个n级FSR通常由n个二元存储器和一个反馈函数组成，如下图所示：  如果这里的反馈函数是线性的，我们则将其称为LFSR，此时该反馈函数可以表示为：  其中ci&#x3D;0或1，⊕表示异或（模二加）。 我们接下来通过一个例子来更直观的明确LF">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://p5.ssl.qhimg.com/t0120111c3c2c65ad47.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t01e60ae90ce8d0f7da.png">
+<meta property="og:image" content="https://p4.ssl.qhimg.com/t0136009fbc340cd9cf.png">
+<meta property="og:image" content="https://p1.ssl.qhimg.com/t017c5158f64d590cd2.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t01cd58532501574579.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t019ca3ed0fa053d582.png">
+<meta property="og:image" content="https://p0.ssl.qhimg.com/t01ca7d030e872490ec.png">
+<meta property="og:image" content="https://p3.ssl.qhimg.com/t01146bab15730cbd30.png">
+<meta property="og:image" content="https://p2.ssl.qhimg.com/t0100384766078bfda8.png">
+<meta property="og:image" content="https://p4.ssl.qhimg.com/t01ef3d957b4726b14c.png">
+<meta property="article:published_time" content="2024-03-01T13:47:35.000Z">
+<meta property="article:modified_time" content="2024-03-01T13:48:47.544Z">
+<meta property="article:author" content="liu">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://p5.ssl.qhimg.com/t0120111c3c2c65ad47.png">
+  
+  
+  
+  <title>反馈移位寄存器 - laosix</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"YARwcptNjUKHbwkUEztnIlZG-gzGzoHsz","app_key":"xkXZIzuPCN0FOpbkgkeGWoMX","server_url":"https://yarwcptn.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>laosix</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/%E8%83%8C%E6%99%AF.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="反馈移位寄存器"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-03-01 21:47" pubdate>
+          2024年3月1日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">反馈移位寄存器</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>LFSR是属于FSR（反馈移位寄存器）的一种，除了LFSR之外，还包括NFSR（非线性反馈移位寄存器）。</p>
+<p>FSR是<strong>流密码</strong>产生<strong>密钥流</strong>的一个重要组成部分，在GF(2)上的一个<strong>n级FSR</strong>通常由<strong>n个二元存储器</strong>和<strong>一个反馈函数</strong>组成，如下图所示：</p>
+<p><img src="https://p5.ssl.qhimg.com/t0120111c3c2c65ad47.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>如果这里的反馈函数是<strong>线性</strong>的，我们则将其称为LFSR，此时该反馈函数可以表示为：</p>
+<p><img src="https://p3.ssl.qhimg.com/t01e60ae90ce8d0f7da.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>其中ci=0或1，⊕表示异或（模二加）。</p>
+<p>我们接下来通过一个例子来更直观的明确LFSR的概念，假设给定一个<strong>5级</strong>的LFSR，其初始状态（即a1到a5这5个二元存储器的值）为：</p>
+<p><img src="https://p4.ssl.qhimg.com/t0136009fbc340cd9cf.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>其反馈函数为：</p>
+<p><img src="https://p1.ssl.qhimg.com/t017c5158f64d590cd2.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>整个过程可以表示为下图所示的形式：</p>
+<p><img src="https://p3.ssl.qhimg.com/t01cd58532501574579.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>接下来我们来计算该LFSR的输出序列，输出序列的<strong>前5位</strong>即为我们的初始状态<strong>10011</strong>，<strong>第6位</strong>的计算过程如下:</p>
+<p><img src="https://p3.ssl.qhimg.com/t019ca3ed0fa053d582.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><strong>第7位</strong>的计算过程如下:</p>
+<p><img src="https://p0.ssl.qhimg.com/t01ca7d030e872490ec.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>由此类推，可以得到<strong>前31位</strong>的计算结果如下：</p>
+<p><code>1001101001000010101110110001111</code></p>
+<p>对于一个n级的LFSR来讲，其<strong>最大周期</strong>为2^n-1，因此对于我们上面的5级LFSR来讲，其<strong>最大周期</strong>为2^5-1=31，再后面的输出序列即为前31位的循环。</p>
+<p>2018 CISCN 线上赛 oldstreamgame</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python">flag = <span class="hljs-string">&quot;flag&#123;xxxxxxxxxxxxxxxx&#125;&quot;</span><br><span class="hljs-keyword">assert</span> flag.startswith(<span class="hljs-string">&quot;flag&#123;&quot;</span>)<br><span class="hljs-keyword">assert</span> flag.endswith(<span class="hljs-string">&quot;&#125;&quot;</span>)<br><span class="hljs-keyword">assert</span> <span class="hljs-built_in">len</span>(flag)==<span class="hljs-number">14</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">lfsr</span>(<span class="hljs-params">R,mask</span>):<br>    output = (R &lt;&lt; <span class="hljs-number">1</span>) &amp; <span class="hljs-number">0xffffffff</span><br>    i=(R&amp;mask)&amp;<span class="hljs-number">0xffffffff</span><br>    lastbit=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> i!=<span class="hljs-number">0</span>:<br>        lastbit^=(i&amp;<span class="hljs-number">1</span>)<br>        i=i&gt;&gt;<span class="hljs-number">1</span><br>    output^=lastbit <br>    <span class="hljs-keyword">return</span> (output,lastbit)<br><br>R=<span class="hljs-built_in">int</span>(flag[<span class="hljs-number">5</span>:-<span class="hljs-number">1</span>],<span class="hljs-number">16</span>)<br>mask = <span class="hljs-number">0b10100100000010000000100010010100</span><br><br>f=<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;key&quot;</span>,<span class="hljs-string">&quot;w&quot;</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">100</span>):<br>    tmp=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">8</span>):<br>        (R,out)=lfsr(R,mask)<br>        tmp=(tmp &lt;&lt; <span class="hljs-number">1</span>)^out<br>    f.write(<span class="hljs-built_in">chr</span>(tmp))<br>f.close()<br></code></pre></td></tr></table></figure>
+<p>分析一下我们的已知条件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs undefined">已知初始状态的长度为4个十六进制数，即32位，初始状态的值即我们要去求的flag。<br>已知反馈函数，只不过这里的反馈函数是代码的形式，我们需要提取出它的数学表达式。<br>已知输出序列。<br></code></pre></td></tr></table></figure>
+<p>那么我们的任务很明确，就是通过分析lfsr函数，整理成数学表达式的形式求解即可，接下来我们一行一行的来分析这个函数：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs scss">#接收两个参数，R是<span class="hljs-number">32</span>位的初始状态(即flag)，<span class="hljs-attribute">mask</span>是<span class="hljs-number">32</span>位的掩码，由于<span class="hljs-attribute">mask</span>已知，所以我们就直接把他当做一个常数即可。<br>def <span class="hljs-built_in">lfsr</span>(R,mask):<br></code></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">#把R左移一位后低32位（即抹去R的最高位，然后在R的最低位补0）的值赋给output变量。</span><br>    <span class="hljs-attr">output</span> = (R &lt;&lt; <span class="hljs-number">1</span>) &amp; <span class="hljs-number">0</span>xffffffff<br></code></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">#把传入的R和mask做按位与运算，运算结果取低32位，将该值赋给i变量。</span><br>    <span class="hljs-attr">i</span>=(R&amp;mask)&amp;<span class="hljs-number">0</span>xffffffff<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#从i的最低位向i的最高位依次做异或运算，将运算结果赋给lastbit变量。</span><br>    lastbit=0<br>    <span class="hljs-keyword">while</span> i!=0:<br>        lastbit^=(i&amp;1)<br>        i=i&gt;&gt;1<br></code></pre></td></tr></table></figure>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">`i&amp;<span class="hljs-number">1</span>` 是一个位与运算操作，用来提取一个数 `i` 的二进制表示中的最后一位（即最低位）。在这个操作中，`&amp;` 是位与运算符，`1` 是一个只有最低位为 <span class="hljs-number">1</span>，其他位均为 <span class="hljs-number">0</span> 的数。当对 `i` 进行与运算时，只有 `i` 的最后一位与 `1` 的最后一位相与，结果为 `1`（如果 `i` 的最后一位是 <span class="hljs-number">1</span>）或 `0`（如果 `i` 的最后一位是 <span class="hljs-number">0</span>）。<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs lua">#将<span class="hljs-built_in">output</span>变量的最后一位设置成lastbit变量的值。<br>    <span class="hljs-built_in">output</span>^=lastbit<br></code></pre></td></tr></table></figure>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs lua">#返回<span class="hljs-built_in">output</span>变量和lastbit变量的值，<span class="hljs-built_in">output</span>即经过一轮lfsr之后的新序列，lastbit即经过一轮lfsr之后输出的一位。<br>    <span class="hljs-keyword">return</span> (<span class="hljs-built_in">output</span>,lastbit)<br></code></pre></td></tr></table></figure>
+<p>通过上面的分析，我们可以看出在这道题的情境下，lfsr函数本质上就是一个<strong>输入R输出lastbit的函数</strong>，虽然我们现在已经清楚了<strong>R是如何经过一系列运算得到lastbit</strong>的，但是我们前面的反馈函数都是<strong>数学表达式</strong>的形式，我们能否将上述过程整理成一个表达式的形式呢？这就需要我们再进一步进行分析：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-attribute">mask</span>只有第<span class="hljs-number">3</span>、<span class="hljs-number">5</span>、<span class="hljs-number">8</span>、<span class="hljs-number">12</span>、<span class="hljs-number">20</span>、<span class="hljs-number">27</span>、<span class="hljs-number">30</span>、<span class="hljs-number">32</span>这几位为<span class="hljs-number">1</span>，其余位均为<span class="hljs-number">0</span>。<br><span class="hljs-attribute">mask</span>与R做按位与运算得到<span class="hljs-selector-tag">i</span>，当且仅当R的第<span class="hljs-number">3</span>、<span class="hljs-number">5</span>、<span class="hljs-number">8</span>、<span class="hljs-number">12</span>、<span class="hljs-number">20</span>、<span class="hljs-number">27</span>、<span class="hljs-number">30</span>、<span class="hljs-number">32</span>这几位中也出现<span class="hljs-number">1</span>时，<span class="hljs-selector-tag">i</span>中才可能出现<span class="hljs-number">1</span>，否则<span class="hljs-selector-tag">i</span>中将全为<span class="hljs-number">0</span>。<br>lastbit是由<span class="hljs-selector-tag">i</span>的最低位向<span class="hljs-selector-tag">i</span>的最高位依次做异或运算得到的，在这个过程中，所有为<span class="hljs-number">0</span>的位我们可以忽略不计（因为<span class="hljs-number">0</span>异或任何数等于任何数本身，不影响最后运算结果），因此lastbit的值仅取决于<span class="hljs-selector-tag">i</span>中有多少个<span class="hljs-number">1</span>：当<span class="hljs-selector-tag">i</span>中有奇数个<span class="hljs-number">1</span>时，lastbit等于<span class="hljs-number">1</span>；当<span class="hljs-selector-tag">i</span>中有偶数个<span class="hljs-number">1</span>时，lastbit等于<span class="hljs-number">0</span>。<br>当R的第<span class="hljs-number">3</span>、<span class="hljs-number">5</span>、<span class="hljs-number">8</span>、<span class="hljs-number">12</span>、<span class="hljs-number">20</span>、<span class="hljs-number">27</span>、<span class="hljs-number">30</span>、<span class="hljs-number">32</span>这几位依次异或结果为<span class="hljs-number">1</span>时，即R中有奇数个<span class="hljs-number">1</span>，因此将导致<span class="hljs-selector-tag">i</span>中有奇数个<span class="hljs-number">1</span>；当R的第<span class="hljs-number">3</span>、<span class="hljs-number">5</span>、<span class="hljs-number">8</span>、<span class="hljs-number">12</span>、<span class="hljs-number">20</span>、<span class="hljs-number">27</span>、<span class="hljs-number">30</span>、<span class="hljs-number">32</span>这几位依次异或结果为<span class="hljs-number">0</span>时，即R中有偶数个<span class="hljs-number">1</span>，因此将导致<span class="hljs-selector-tag">i</span>中有偶数个<span class="hljs-number">1</span>。<br>因此我们可以建立出联系：lastbit等于R的第<span class="hljs-number">3</span>、<span class="hljs-number">5</span>、<span class="hljs-number">8</span>、<span class="hljs-number">12</span>、<span class="hljs-number">20</span>、<span class="hljs-number">27</span>、<span class="hljs-number">30</span>、<span class="hljs-number">32</span>这几位依次异或的结果。<br></code></pre></td></tr></table></figure>
+<p>将其写成数学表示式的形式，即为：</p>
+<p><img src="https://p3.ssl.qhimg.com/t01146bab15730cbd30.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>显然，lastbit和R之间满足线性关系，那么接下来我们就可以开始求解了：</p>
+<p>我们想象这样一个场景，当即将输出第32位lastbit时，此时R已经左移了31位，根据上面的数学表达式，我们有：</p>
+<p><img src="https://p2.ssl.qhimg.com/t0100384766078bfda8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这样我们就可以求出R的第1位，同样的方法，我们可以求出R的第2位：</p>
+<p><img src="https://p4.ssl.qhimg.com/t01ef3d957b4726b14c.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>以此类推，R的全部32位我们都可以依次求出了，将这一计算过程写成代码形式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python">mask = <span class="hljs-string">&#x27;10100100000010000000100010010100&#x27;</span><br>key = <span class="hljs-string">&#x27;00100000111111011110111011111000&#x27;</span><br>tmp = key<br>R= <span class="hljs-string">&#x27;&#x27;</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">32</span>):<br>    output = <span class="hljs-string">&#x27;?&#x27;</span>+key[:<span class="hljs-number">31</span>]<br>    ans = <span class="hljs-built_in">int</span>(tmp[-<span class="hljs-number">1</span>-i])^<span class="hljs-built_in">int</span>(output[-<span class="hljs-number">3</span>])^<span class="hljs-built_in">int</span>(output[-<span class="hljs-number">5</span>])^<span class="hljs-built_in">int</span>(output[-<span class="hljs-number">8</span>])^<span class="hljs-built_in">int</span>(output[-<span class="hljs-number">12</span>])^<span class="hljs-built_in">int</span>(output[-<span class="hljs-number">20</span>])^<span class="hljs-built_in">int</span>(output[-<span class="hljs-number">27</span>])^<span class="hljs-built_in">int</span>(output[-<span class="hljs-number">30</span>])<br>    R+=<span class="hljs-built_in">str</span>(ans)<br>    key = <span class="hljs-built_in">str</span>(ans)+key[:<span class="hljs-number">31</span>]<br>R= <span class="hljs-built_in">format</span>(<span class="hljs-built_in">int</span>(R[::-<span class="hljs-number">1</span>],<span class="hljs-number">2</span>),<span class="hljs-string">&#x27;x&#x27;</span>)<br>flag = <span class="hljs-string">&#x27;flag&#123;&#x27;</span>+R+<span class="hljs-string">&quot;&#125;&quot;</span><br><span class="hljs-built_in">print</span>(flag)<br></code></pre></td></tr></table></figure>
+<p>flag{926201d7}</p>
+<h2 id="2018-強網杯-Streamgame2"><a href="#2018-強網杯-Streamgame2" class="headerlink" title="2018 強網杯 Streamgame2"></a>2018 強網杯 Streamgame2</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> flag <span class="hljs-keyword">import</span> flag<br><span class="hljs-keyword">assert</span> flag.startswith(<span class="hljs-string">&quot;flag&#123;&quot;</span>)<br><span class="hljs-keyword">assert</span> flag.endswith(<span class="hljs-string">&quot;&#125;&quot;</span>)<br><span class="hljs-keyword">assert</span> <span class="hljs-built_in">len</span>(flag)==<span class="hljs-number">27</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">lfsr</span>(<span class="hljs-params">R,mask</span>):<br>    output = (R &lt;&lt; <span class="hljs-number">1</span>) &amp; <span class="hljs-number">0xffffff</span><br>    i=(R&amp;mask)&amp;<span class="hljs-number">0xffffff</span><br>    lastbit=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> i!=<span class="hljs-number">0</span>:<br>        lastbit^=(i&amp;<span class="hljs-number">1</span>)<br>        i=i&gt;&gt;<span class="hljs-number">1</span><br>    output^=lastbit<br>    <span class="hljs-keyword">return</span> (output,lastbit)<br><br>R=<span class="hljs-built_in">int</span>(flag[<span class="hljs-number">5</span>:-<span class="hljs-number">1</span>],<span class="hljs-number">2</span>)<br>mask=<span class="hljs-number">0x100002</span><br><br>f=<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;key&quot;</span>,<span class="hljs-string">&quot;ab&quot;</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">12</span>):<br>    tmp=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">8</span>):<br>        (R,out)=lfsr(R,mask)<br>        tmp=(tmp &lt;&lt; <span class="hljs-number">1</span>)^out<br>    f.write(<span class="hljs-built_in">chr</span>(tmp))<br>f.close()<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> Crypto.Util.number <span class="hljs-keyword">import</span> *<br><br><span class="hljs-comment">#bin_out = open(&#x27;key.txt&#x27;,&#x27;rb&#x27;).read()</span><br><span class="hljs-comment">#key = bin(bytes_to_long(bin_out))[2:]</span><br><br>key = <span class="hljs-string">&#x27;101100101110100100001&#x27;</span><br>mask= <span class="hljs-string">&#x27;100000000000000000010&#x27;</span><br><br>R = <span class="hljs-string">&#x27;&#x27;</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">21</span>):<br>    output = <span class="hljs-string">&#x27;?&#x27;</span> + key[:<span class="hljs-number">20</span>]<br>    ans = <span class="hljs-built_in">int</span>(key[-<span class="hljs-number">1</span>]) ^ <span class="hljs-built_in">int</span>(output[-<span class="hljs-number">2</span>])<br>    R += <span class="hljs-built_in">str</span>(ans)<br>    key = <span class="hljs-built_in">str</span>(ans) + key[:<span class="hljs-number">20</span>]<br><br><span class="hljs-built_in">print</span>(R[::-<span class="hljs-number">1</span>])<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>反馈移位寄存器</div>
+      <div>http://example.com/2024/03/01/反馈移位寄存器/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年3月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/02/03/%E8%BF%9E%E5%88%86%E6%95%B0/" title="连分数">
+                        <span class="hidden-mobile">连分数</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"YARwcptNjUKHbwkUEztnIlZG-gzGzoHsz","appKey":"xkXZIzuPCN0FOpbkgkeGWoMX","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
