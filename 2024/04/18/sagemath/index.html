@@ -1,0 +1,795 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon-32x32.png">
+  <link rel="icon" href="/img/favicon-32x32.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="liu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="sagemath与python的不同 12345678x**y#均表示幂x^y#sage中表示幂，python中是异或x^^y#sage中合法且表示异或 环和域 整数环，ZZ 有理数环，QQ 实数域，RR 负数域，CC 多项式环，PolynomialRing() 1PR.&lt;x&gt; &#x3D; PolynomialRing(Zmod(N)) 创建了一个mod n下的多项式，名为PR，并设有一个未知">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sagemath">
+<meta property="og:url" content="http://example.com/2024/04/18/sagemath/index.html">
+<meta property="og:site_name" content="laosix">
+<meta property="og:description" content="sagemath与python的不同 12345678x**y#均表示幂x^y#sage中表示幂，python中是异或x^^y#sage中合法且表示异或 环和域 整数环，ZZ 有理数环，QQ 实数域，RR 负数域，CC 多项式环，PolynomialRing() 1PR.&lt;x&gt; &#x3D; PolynomialRing(Zmod(N)) 创建了一个mod n下的多项式，名为PR，并设有一个未知">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-04-18T13:10:13.000Z">
+<meta property="article:modified_time" content="2024-04-18T13:11:10.927Z">
+<meta property="article:author" content="liu">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>sagemath - laosix</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"YARwcptNjUKHbwkUEztnIlZG-gzGzoHsz","app_key":"xkXZIzuPCN0FOpbkgkeGWoMX","server_url":"https://yarwcptn.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>laosix</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/%E8%83%8C%E6%99%AF.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="sagemath"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-18 21:10" pubdate>
+          2024年4月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          983 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">sagemath</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="sagemath与python的不同"><a href="#sagemath与python的不同" class="headerlink" title="sagemath与python的不同"></a>sagemath与python的不同</h2>
+<figure class="highlight parser3"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs parser3"><span class="language-xml">x**y</span><br><span class="language-xml"></span><span class="hljs-comment">#均表示幂</span><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml">x</span><span class="hljs-keyword">^y</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="hljs-comment">#sage中表示幂，python中是异或</span><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml">x^</span><span class="hljs-keyword">^y</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="hljs-comment">#sage中合法且表示异或</span><br></code></pre></td></tr></table></figure>
+<h2 id="环和域"><a href="#环和域" class="headerlink" title="环和域"></a>环和域</h2>
+<p>整数环，ZZ</p>
+<p>有理数环，QQ</p>
+<p>实数域，RR</p>
+<p>负数域，CC</p>
+<p>多项式环，PolynomialRing()</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">PR</span>.&lt;<span class="hljs-variable">x</span>&gt; = <span class="hljs-function"><span class="hljs-title">PolynomialRing</span>(<span class="hljs-title">Zmod</span>(<span class="hljs-variable">N</span>))</span><br></code></pre></td></tr></table></figure>
+<p>创建了一个mod n下的多项式，名为PR，并设有一个未知数x</p>
+<h2 id="相关的算法"><a href="#相关的算法" class="headerlink" title="相关的算法"></a>相关的算法</h2>
+<p>求逆元： inverse_mod(x,n)   （下了gmpy2库，就还可以用gmpy2.invert(e,phi))</p>
+<p>阶乘: factorial(x)</p>
+<p>求欧拉函数： euler_phi(n)</p>
+<p>中国剩余定理求解: crt([m1,m2],[n1,n2])</p>
+<p>分解素数：factor()</p>
+<h2 id="矩阵"><a href="#矩阵" class="headerlink" title="矩阵"></a>矩阵</h2>
+<p>定义矩阵
+使用方法solve right,执行A.solve right(Y),返回一个矩阵（或向量）X 满足AX= Y</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">A</span> = Matrix([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>],[<span class="hljs-number">3</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>],[<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>])<br><span class="hljs-attribute">Y</span> = vector([<span class="hljs-number">0</span>,-<span class="hljs-number">4</span>,-<span class="hljs-number">1</span>])<br><span class="hljs-attribute">X</span> = A.solve_right(Y)<br></code></pre></td></tr></table></figure>
+<p>类似的，使用 A.solve left(Y) 求解满足 XA = Y 的 X.</p>
+<p>matrix 命令中的第一个参数告诉 Sage 这个矩阵 是整数环 (ZZ) 上的，有理数环 (QQ) 上的，还是实数环 (RR) 上的:</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs lua">sage: AZ = matrix(ZZ, <span class="hljs-string">[[2,0], [0,1]]</span>) <br>sage: AQ = matrix(QQ, <span class="hljs-string">[[2,0], [0,1]]</span>) <br>sage: AR = matrix(RR, <span class="hljs-string">[[2,0], [0,1]]</span>)<br></code></pre></td></tr></table></figure>
+<p>新建一个3 x 3的矩阵A</p>
+<p>sage: A = Matrix(3,range(9))</p>
+<p>A的阶梯形式</p>
+<p>sage: A.echelon form()</p>
+<p>A的转置矩阵</p>
+<p>sage: A.T == A.transpose()</p>
+<p>A的行向量</p>
+<p>sage: A.rows()</p>
+<p>A的列向量</p>
+<p>sage: A.columns()</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">A = matrix(Zmod(2),[[1,2,3],[3,2,1],[1,1,1]])<br>print(A)<br>&#x27;&#x27;&#x27;<br><span class="hljs-meta">[1 0 1]</span><br><span class="hljs-meta">[1 0 1]</span><br><span class="hljs-meta">[1 1 1]</span><br>&#x27;&#x27;&#x27;<br><br>B = matrix(GF(2),A)<br>print(B)<br>&#x27;&#x27;&#x27;<br><span class="hljs-meta">[1 0 1]</span><br><span class="hljs-meta">[1 0 1]</span><br><span class="hljs-meta">[1 1 1]</span><br>&#x27;&#x27;&#x27;<br><br>m = matrix(GF(2),3,3)<br>print(m)<br>#定义3x3初始化矩阵，默认0<br><br></code></pre></td></tr></table></figure>
+<p>定义向量</p>
+<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs leaf">Y = vector(ZZ,[0,-4,-1])<br>print(Y)<br><span class="hljs-punctuation">#</span><span class="hljs-params">(0,<span class="hljs-operator">-</span>4,<span class="hljs-operator">-</span>1)</span><br><br>Y = vector(GF(2),[0,-4,-1])<br>print(Y)<br><span class="hljs-punctuation">#</span><span class="hljs-params">(0,0,1)</span><br></code></pre></td></tr></table></figure>
+<h2 id="创建多项式环"><a href="#创建多项式环" class="headerlink" title="创建多项式环"></a>创建多项式环</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sagemath">R.&lt;x&gt; = PloynomialRing(QQ)<br></code></pre></td></tr></table></figure>
+<h2 id="多元多项式"><a href="#多元多项式" class="headerlink" title="多元多项式"></a>多元多项式</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sagemath">R.&lt;s0, s1, s2&gt; = PolynomialRing(QQ,3)<br>I = ideal(s0 + s1 + s2 - s, s0^e - c0, s1^17 - c1, s2^17 - c2)<br>s = I.groebner_basis()<br><br></code></pre></td></tr></table></figure>
+<h2 id="sagemath计算离散对数"><a href="#sagemath计算离散对数" class="headerlink" title="sagemath计算离散对数"></a>sagemath计算离散对数</h2>
+<p>简单来说，a^c≡b(mod p)，在离散对数问题中，求的是c。但是在RSA中，就是要求a。</p>
+<p><span style="margin-left: 50%; transform: translateX(-50%); display: inline-block; "><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="19.203ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 8487.7 1000" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="MJX-1-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path id="MJX-1-TEX-I-1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path><path id="MJX-1-TEX-N-2261" d="M56 444Q56 457 70 464H707Q722 456 722 444Q722 430 706 424H72Q56 429 56 444ZM56 237T56 250T70 270H707Q722 262 722 250T707 230H70Q56 237 56 250ZM56 56Q56 71 72 76H706Q722 70 722 56Q722 44 707 36H70Q56 43 56 56Z"></path><path id="MJX-1-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path><path id="MJX-1-TEX-N-33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"></path><path id="MJX-1-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-1-TEX-N-6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path id="MJX-1-TEX-N-6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z"></path><path id="MJX-1-TEX-N-64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z"></path><path id="MJX-1-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><use data-c="32" xlink:href="#MJX-1-TEX-N-32"></use></g><g data-mml-node="TeXAtom" transform="translate(533,413) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><use data-c="1D465" xlink:href="#MJX-1-TEX-I-1D465"></use></g></g></g><g data-mml-node="mo" transform="translate(1265.2,0)"><use data-c="2261" xlink:href="#MJX-1-TEX-N-2261"></use></g><g data-mml-node="mn" transform="translate(2321,0)"><use data-c="31" xlink:href="#MJX-1-TEX-N-31"></use><use data-c="33" xlink:href="#MJX-1-TEX-N-33" transform="translate(500,0)"></use></g><g data-mml-node="mspace" transform="translate(3321,0)"></g><g data-mml-node="mo" transform="translate(4321,0)"><use data-c="28" xlink:href="#MJX-1-TEX-N-28"></use></g><g data-mml-node="mi" transform="translate(4710,0)"><use data-c="6D" xlink:href="#MJX-1-TEX-N-6D"></use><use data-c="6F" xlink:href="#MJX-1-TEX-N-6F" transform="translate(833,0)"></use><use data-c="64" xlink:href="#MJX-1-TEX-N-64" transform="translate(1333,0)"></use></g><g data-mml-node="mspace" transform="translate(6599,0)"></g><g data-mml-node="mn" transform="translate(7098.7,0)"><use data-c="32" xlink:href="#MJX-1-TEX-N-32"></use><use data-c="33" xlink:href="#MJX-1-TEX-N-33" transform="translate(500,0)"></use></g><g data-mml-node="mo" transform="translate(8098.7,0)"><use data-c="29" xlink:href="#MJX-1-TEX-N-29"></use></g></g></g></svg></span></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs stylus">x=<span class="hljs-built_in">discrete_log</span>(<span class="hljs-built_in">mod</span>(<span class="hljs-number">13</span>,<span class="hljs-number">23</span>),<span class="hljs-built_in">mod</span>(<span class="hljs-number">2</span>,<span class="hljs-number">23</span>))<br>#或<span class="hljs-built_in">discrete_log</span>(<span class="hljs-number">13</span>,<span class="hljs-built_in">mod</span>(<span class="hljs-number">2</span>,<span class="hljs-number">23</span>))<br><span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(x)</span></span><br><br><br>#或<br><span class="hljs-selector-tag">a</span> = <span class="hljs-built_in">Zmod</span>(<span class="hljs-number">23</span>)(<span class="hljs-number">13</span>)<br>y = <span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.log</span>(<span class="hljs-number">2</span>,<span class="hljs-number">23</span>)<br><span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(y)</span></span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sage"><br># 现成的欧拉函数<br>n = …<br>phi = euler_phi(n)<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs coffeescript"><span class="hljs-keyword">from</span> sympy <span class="hljs-keyword">import</span> *<br><span class="hljs-built_in">print</span>(sqrt_mod(a, p))<br></code></pre></td></tr></table></figure>
+<p>sqrt_mod(a, p)用于计算在模意义下 a 的平方根（如果存在的话）。<br>
+具体来说，如果存在一个整数 b 满足 b^2 ≡ a (mod p)，则 sqrt_mod(a, p) 返回一个值 b。否则，函数将引发 ValueError 异常，表示在模 p 意义下，a 没有平方根。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stylus">P.&lt;a&gt; = <span class="hljs-built_in">PolynomialRing</span>(<span class="hljs-built_in">Zmod</span>(p))<br>f = <span class="hljs-number">4</span>*k2*(x1^<span class="hljs-number">3</span>+a*x1+b)<span class="hljs-built_in">-</span>(<span class="hljs-number">3</span>*x1^<span class="hljs-number">2</span>+a)^<span class="hljs-number">2</span><br><span class="hljs-selector-tag">a</span> = f<span class="hljs-selector-class">.roots</span>()<br><span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(long_to_bytes(int(a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>])</span></span>))<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sage">#Q = num*P<br>#(求私钥k)<br>from Crypto.Util.number import *<br>p = 146808027458411567<br>a = 46056180<br>b = 2316783294673<br>E = EllipticCurve(GF(p),(a,b))<br>P = E(119851377153561800,50725039619018388)<br>Q = E(22306318711744209,111808951703508717)<br><br>num1 =  discrete_log(Q,P,operation = &#x27;+&#x27;)<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sage">sage: P.&lt;x,y&gt; = PolynomialRing(QQ)<br>....: f = (x+1)*(y+1)-N<br>....: m =ideal(f).groebner_basis()<br>....: print(m)<br>....: b = N-m[0].constant_coefficient()<br></code></pre></td></tr></table></figure>
+<p>将整数转化为二进制列表
+10.bits()</p>
+<h2 id="解方程"><a href="#解方程" class="headerlink" title="解方程"></a>解方程</h2>
+<p>solve 函数用于解方程，要使用它，先要<strong>指定变量</strong>，然后将方程（或方程组）以及要求解的变量作为参数 传给 solve。</p>
+<figure class="highlight plaintext"><figcaption><span>title:'solve'</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sage">sage: var(&#x27;x y p q&#x27;)<br>sage: eq1 = p+q==9 <br>sage: eq2 = q*y+p*x==-6 <br>sage: eq3 = q*yˆ2+p*xˆ2==24 <br>sage: solve([eq1,eq2,eq3,p==1],p,q,x,y) <br></code></pre></td></tr></table></figure>
+<h2 id="数论"><a href="#数论" class="headerlink" title="数论"></a>数论</h2>
+<p>sage: R = IntegerModRing(97) or R = Zmod(97) #定义模数为97的环</p>
+<p>sage: a = R(2) / R(3) #环上的除法</p>
+<p>sage: a.is_square() #是否为二次剩余</p>
+<p>sage: gcd(3,2) #最大公因数</p>
+<p>sage: factorial(5) #阶乘</p>
+<p>sage: next_prime() #后一个素数</p>
+<p>sage: previous_prime() #前一个素数</p>
+<p>sage: divisors() #所有因子</p>
+<p>sage: sigma(n,k) #n的所有因子的k次幂之和</p>
+<p>sage: inverse_mod(a,n) #求逆</p>
+<p>两种因式分解</p>
+<p>sage: factor(1024) -&gt; 2^10
+sage: prime_divisors(1024) -&gt; [2]</p>
+<p>有限域下开根</p>
+<p>sage: R.&lt;\X&gt; = PolynomialRing(Zmod(p))</p>
+<p>sage: f = x^256 - c</p>
+<p>sage: f.monic().roots()</p>
+<p>sage: euler_phi(n) #求n的欧拉函数</p>
+<p>sage: phi = n*prod([1 - 1/p for p in prime divisors(n)]);</p>
+<p>sage: crt(m1,m2,n1,n2) #中国剩余定理 【x % n1 = m1; x % n2 = m3】</p>
+<h2 id="Elliptic-Curves"><a href="#Elliptic-Curves" class="headerlink" title="Elliptic Curves"></a>Elliptic Curves</h2>
+<p>EllipticCurve(R, [a1, a2, a3, a4, a6])</p>
+<p>eg:</p>
+<p>sage: ecc = EllipticCurve(GF(q), [a,b]) #初始化一条线</p>
+<p>sage: G = ecc(x,y) #选定其上的一个点</p>
+<p>sage: G.order() #G点的阶</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>sagemath</div>
+      <div>http://example.com/2024/04/18/sagemath/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>liu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/12/Pohlig-Hellman%E7%AE%97%E6%B3%95/" title="Pohlig-Hellman算法">
+                        <span class="hidden-mobile">Pohlig-Hellman算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"YARwcptNjUKHbwkUEztnIlZG-gzGzoHsz","appKey":"xkXZIzuPCN0FOpbkgkeGWoMX","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
